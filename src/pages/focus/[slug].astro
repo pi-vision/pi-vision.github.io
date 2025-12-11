@@ -1,0 +1,155 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { getCollectionName } from "../../data/focusCollections";
+
+export async function getStaticPaths() {
+  const metaEntries = await getCollection('focus_meta');
+  return metaEntries
+    .filter((entry) => Boolean(getCollectionName(entry.slug)))
+    .map((entry) => ({
+      params: { slug: entry.slug },
+      props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const detailCollection = getCollectionName(entry.slug);
+const detailEntriesRaw = detailCollection ? await getCollection(detailCollection) : [];
+const detailEntries = await Promise.all(
+  detailEntriesRaw
+    .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
+    .map(async (item) => {
+      const rendered = await item.render();
+      return {
+        slug: item.slug,
+        data: item.data,
+        Content: rendered.Content,
+      };
+    })
+);
+const hasItems = detailEntries.length > 0;
+const metaRendered = await entry.render();
+const MetaContent = metaRendered.Content;
+const heroImageClass = (() => {
+  switch (entry.slug) {
+    case 'computation':
+      return 'object-cover object-[center_10%]';
+    default:
+      return 'object-cover object-bottom';
+  }
+})();
+---
+<BaseLayout title={`${entry.data.title} – Focus`}>
+  <div class="mb-6 text-sm flex items-center justify-between flex-wrap gap-4">
+    <a href="/" class="inline-flex items-center gap-2 font-semibold text-blue-700 hover:text-blue-900">
+      <span aria-hidden="true">←</span>
+      <span>Back to home</span>
+    </a>
+  </div>
+
+  <div class="mb-8">
+    <div class="relative overflow-hidden rounded-2xl ring-1 ring-black/10 h-40 sm:h-48 lg:h-52" transition:name={`focus-${entry.slug}`}>
+      <img
+        src={entry.data.image}
+        alt=""
+        class={`absolute inset-0 h-full w-full ${heroImageClass}`}
+        loading="lazy"
+        decoding="async"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent"></div>
+    </div>
+  </div>
+
+  <div class="space-y-4 mb-10">
+    {entry.data.kicker && (
+      <div class="text-xs uppercase tracking-[0.2em] text-gray-500">
+        {entry.data.kicker}
+      </div>
+    )}
+
+    <h1 class="text-3xl font-semibold text-gray-900">
+      {entry.data.title}
+    </h1>
+
+    {entry.data.blurb && (
+      <p class="text-lg text-gray-700">
+        {entry.data.blurb}
+      </p>
+    )}
+
+    {MetaContent && (
+      <div class="prose max-w-none">
+        <MetaContent />
+      </div>
+    )}
+  </div>
+
+  {hasItems && (
+    <section class="space-y-12">
+      {detailEntries.map((item) => {
+        const isExternal = item.data.href?.startsWith('http');
+        return (
+          <article id={`${entry.slug}-${item.slug}`} class="scroll-mt-24">
+            <div class="grid gap-6 md:grid-cols-5 md:items-start">
+              <div class="md:col-span-2">
+                <div class="relative overflow-hidden rounded-2xl ring-1 ring-black/10 aspect-[5/3]" transition:name={`focus-${entry.slug}-${item.slug}`}>
+                  <img
+                    src={item.data.image}
+                    alt={item.data.title}
+                    class={`absolute inset-0 h-full w-full object-cover ${item.slug === 'alma' ? 'object-bottom' : 'object-center'}`}
+                    loading="lazy"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
+                </div>
+              </div>
+
+              <div class="md:col-span-3 space-y-3">
+                {item.data.kicker && (
+                  <div class="text-xs uppercase tracking-[0.2em] text-gray-500">
+                    {item.data.kicker}
+                  </div>
+                )}
+                <h2 class="text-2xl font-semibold text-gray-900">
+                  {item.data.title}
+                </h2>
+
+                {item.Content ? (
+                  <div class="prose max-w-none">
+                    <item.Content />
+                  </div>
+                ) : (
+                  item.data.description && (
+                    <p class="text-gray-700">{item.data.description}</p>
+                  )
+                )}
+
+                <div class="flex flex-wrap gap-4 pt-2">
+                  {item.data.showPublications !== false && (
+                    <a
+                      href={`/publications/#${item.slug}`}
+                      class="text-sm font-medium underline underline-offset-4"
+                    >
+                      View related publications
+                    </a>
+                  )}
+                  {item.data.href && (
+                    <a
+                      href={item.data.href}
+                      class="text-sm font-medium inline-flex items-center gap-1 text-blue-700 hover:text-blue-900"
+                      target={isExternal ? '_blank' : undefined}
+                      rel={isExternal ? 'noopener noreferrer' : undefined}
+                    >
+                      Visit resource
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </section>
+  )}
+</BaseLayout>

@@ -8,6 +8,8 @@
  *     kicker?: string;       // small label above title
  *     blurb?: string;        // short line under title
  *     slug?: string;         // optional: for shared-element transitions
+ *     gallery?: Array<{ image:string, alt?:string }>;
+ *     galleryFull?: boolean; // optional: render this item's gallery larger (optional)
  *   }>
  * - heading?: string
  * - ratio?: string           // tailwind aspect ratio; default 16:9
@@ -15,19 +17,33 @@
 const { items = [], heading = 'Research Focus', ratio = 'aspect-[16/9]' } = Astro.props;
 if (!items.length) return;
 ---
-
-<section class="mb-10">
+<section
+  class="mb-10"
+  style="--fg-row-h:12rem;"
+>
   <div class="mb-3">
     <h2 class="text-xl font-semibold">{heading}</h2>
   </div>
 
-  <!-- 2-column grid, left-aligned -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <!-- grid: we'll place tiles on grid-row:1 and galleries on grid-row:2 (full-width) -->
+  <div class="fg-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" style="align-items:start;">
+    <style>
+      /* local styles: reveal the gallery sibling when its preceding .group is hovered/focused */
+      .fg-grid .group { grid-row: 1; }
+      .fg-grid .fg-gallery { grid-row: 2; grid-column: 1 / -1; max-height: 0; opacity: 0; overflow: hidden;
+                             transition: max-height 300ms ease, opacity 200ms ease; pointer-events: none; background: white/95; }
+      .fg-grid .group:hover + .fg-gallery,
+      .fg-grid .group:focus-within + .fg-gallery,
+      .fg-grid .fg-gallery:hover { max-height: var(--fg-row-h); opacity: 1; pointer-events: auto; }
+       .fg-grid .fg-gallery-inner { height: var(--fg-row-h); display: flex; align-items: center; justify-content: flex-start; gap: 0.75rem; flex-wrap: nowrap; overflow-x: auto; padding: 0.5rem; }
+       .fg-grid .fg-gallery-inner img { height: calc(var(--fg-row-h) - 1rem); flex-shrink: 0; width: auto; object-fit: cover; border-radius: 0.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.06); }
+    </style>
+
     {items.map((it, i) => {
       const Tile = (
         <article
-        class={`group relative overflow-hidden rounded-xl ring-1 ring-black/10 bg-black ${ratio}`}
-        transition:name={`focus-${it.slug}`}
+          class={`relative rounded-xl ring-1 ring-black/10 bg-black ${ratio} overflow-hidden`}
+          transition:name={`focus-${it.slug}`}
         >
           <!-- Background image -->
           <img
@@ -57,13 +73,57 @@ if (!items.length) return;
           </div>
 
           <!-- subtle hover lift -->
-          <div class="pointer-events-none absolute inset-0 ring-0 transition group-hover:ring-2 group-hover:ring-white/30"></div>
+          <div class="pointer-events-none absolute inset-0 ring-0 transition-all duration-200"></div>
         </article>
       );
 
-      return it.href
-        ? <a href={it.href} class="block">{Tile}</a>
-        : Tile;
+      // Each tile (group) is immediately followed by its gallery (fg-gallery).
+      // CSS grid placement (grid-row) keeps all tiles visually in the same top row
+      // and all galleries on the full-width row below.
+      return (
+        <>
+          <div class="group peer relative overflow-visible gallery-trigger" data-gallery={`gallery-${i}`} data-href={it.href}>
+             {it.href ? <a href={it.href} class="block">{Tile}</a> : Tile}
+           </div>
+
+          {/* gallery sibling — revealed when the preceding .group is hovered */}
+          {it.gallery && it.gallery.length > 0 && (
+            <div class="fg-gallery" role="region" aria-hidden="true">
+              <div class="fg-gallery-inner">
+                {it.gallery.map((g, idx) => (
+                  <a key={idx} href={g.href || '#'} class="relative block hover:opacity-80 transition-opacity">
+                     <img
+                       src={g.image}
+                       alt={g.alt || ''}
+                       loading="lazy"
+                     />
+                     {g.label && (
+                       <div class="absolute bottom-1 right-1 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                         {g.label}
+                       </div>
+                     )}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      );
     })}
   </div>
 </section>
+
+<script>
+    // Click tile to navigate to research page
+    document.querySelectorAll('.gallery-trigger').forEach((trigger) => {
+      trigger.addEventListener('click', (e) => {
+        // if clicking a link in the gallery, allow it
+        if (e.target.closest('a[href]')) return;
+        
+        const href = trigger.getAttribute('data-href');
+        if (href) {
+          window.location.href = href;
+        }
+      });
+    });
+  </script>
