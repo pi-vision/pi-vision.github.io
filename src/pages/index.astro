@@ -63,7 +63,7 @@ const focusItems = await Promise.all(focusMeta.map(async (entry) => {
   };
 }));
 ---
-<BaseLayout title="TCIG/CIPS" noTopPad>
+<BaseLayout title="PI-Vision" noTopPad>
   <section
 	class="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mb-8 overflow-hidden bg-black"
 	aria-label="Hero"
@@ -79,7 +79,7 @@ const focusItems = await Promise.all(focusMeta.map(async (entry) => {
 		poster=""
 		aria-hidden="true"
 	>
-		<source src="/tcig_lensed.mp4" type="video/mp4" />
+		<source src="/pivision-animated.mp4" type="video/mp4" />
 		<!-- Fallback image if video can't play -->
 		<img
 		src=""
@@ -161,7 +161,7 @@ const focusItems = await Promise.all(focusMeta.map(async (entry) => {
       {recentTiles.map(p => (
 		<PubTile
 			entry={p}
-			to={`/publications/#${p.slug}`}          // enables home tile → publications tile
+			to={`/publications/${p.slug}/`}          // link directly to the publication page
 			suppressTitleTransition={false}           // ok here; no duplicates on the home page
 		/>
 		))}

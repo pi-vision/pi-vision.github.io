@@ -34,7 +34,7 @@ const MetaContent = metaRendered.Content;
 const heroImageClass = (() => {
   switch (entry.slug) {
     case 'computation':
-      return 'object-cover object-[center_10%]';
+      return 'object-cover object-[center_40%]';
     default:
       return 'object-cover object-bottom';
   }
@@ -89,6 +89,7 @@ const heroImageClass = (() => {
     <section class="space-y-12">
       {detailEntries.map((item) => {
         const isExternal = item.data.href?.startsWith('http');
+        const linkTarget = `/publications/focus/${item.slug}/`;
         return (
           <article id={`${entry.slug}-${item.slug}`} class="scroll-mt-24">
             <div class="grid gap-6 md:grid-cols-5 md:items-start">
@@ -127,7 +128,7 @@ const heroImageClass = (() => {
                 <div class="flex flex-wrap gap-4 pt-2">
                   {item.data.showPublications !== false && (
                     <a
-                      href={`/publications/#${item.slug}`}
+                      href={linkTarget}
                       class="text-sm font-medium underline underline-offset-4"
                     >
                       View related publications

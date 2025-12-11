@@ -2,16 +2,16 @@
 // src/layouts/BaseLayout.astro
 import '../styles/tailwind.css';
 import { ClientRouter } from 'astro:transitions';
-const { title = 'TCIG/CIPS', noTopPad = false } = Astro.props;
+const { title = 'PI-Vision', noTopPad = false } = Astro.props;
 ---
 
 <html lang="en" data-astro-transition>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" href="/cips_logo_white_bg.svg" type="image/svg+xml" />
-    <link rel="icon" href="/cips_logo_white_bg_32x32.png" sizes="32x32" type="image/png" />
-    <link rel="icon" href="/cips_logo_white_bg_16x16.png" sizes="16x16" type="image/png" />
+    <link rel="icon" href="/pivision-logo.svg" type="image/svg+xml" />
+    <link rel="icon" href="/pivision-logo_32x32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/pivision-logo_16x16.png" sizes="16x16" type="image/png" />
     <title>{title}</title>
     <!-- SPA routing + view transitions -->
     <ClientRouter/>  <!-- rely on named transitions only -->
@@ -38,36 +38,19 @@ const { title = 'TCIG/CIPS', noTopPad = false } = Astro.props;
   <body class="min-h-screen bg-white text-gray-900">
     <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b" transition:persist>
       <div class="relative">
-        <nav class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between min-h-[56px]">
+        <nav class="mx-auto max-w-6xl px-4 py-2 flex items-center justify-between min-h-[48px]">
           <!-- Brand -->
           <a href="/" class="flex items-center gap-3">
-            <img src="/cips_logo.svg" alt="" class="h-12 w-12" transition:name="logo" />
-            <span class="font-semibold" transition:name="brand">TCIG/CIPS</span>
+            <img src="/logo.svg" alt="" class="h-10 w-10" transition:name="logo" />
+            <span class="font-semibold text-lg" transition:name="brand">PI-Vision</span>
           </a>
 
           <!-- Desktop nav -->
-          <ul class="hidden md:flex items-center gap-6 text-sm">
-            <li><a class="hover:underline" href="/">Home</a></li>
-            <li><a class="hover:underline" href="/research/">Research Focus</a></li>
-            <li><a class="hover:underline" href="/publications/">Publications</a></li>
-            <li><a class="hover:underline" href="/people/">People</a></li>
-
-            <li>
-              <a
-                href="https://www.compimaging.dgp.toronto.edu/home/"
-                class="inline-flex items-center justify-center h-16"
-                aria-label="TCIG home"
-                title="TCIG home"
-              >
-                <img
-                  src="/tcig_webicon.png"
-                  alt=""
-                  class="block h-16 w-16 object-contain select-none transition hover:opacity-80"
-                  decoding="async"
-                  loading="lazy"
-                />
-              </a>
-            </li>
+          <ul class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-900">
+            <li><a class="hover:text-black transition" href="/">Home</a></li>
+            <li><a class="hover:text-black transition" href="/research/">Research Focus</a></li>
+            <li><a class="hover:text-black transition" href="/publications/">Publications</a></li>
+            <li><a class="hover:text-black transition" href="/people/">People</a></li>
           </ul>
 
           <!-- Mobile toggle -->
@@ -99,14 +82,14 @@ const { title = 'TCIG/CIPS', noTopPad = false } = Astro.props;
             <!-- Icon link -->
             <li>
               <a
-                href="https://www.compimaging.dgp.toronto.edu/home/"
+                href="/"
                 class="flex items-center gap-2 rounded px-3 py-2 hover:bg-gray-50"
-                aria-label="TCIG home"
-                title="TCIG home"
+                aria-label="PI-Vision home"
+                title="PI-Vision home"
               >
                 <img
-                  src="/tcig_webicon.png"
-                  alt=""
+                  src="/pivision-logo.png"
+                  alt="PI-Vision logo"
                   width="20"
                   height="20"
                   class="h-14 w-14 object-contain select-none"
@@ -250,12 +233,11 @@ const { title = 'TCIG/CIPS', noTopPad = false } = Astro.props;
           <!-- Brand + blurb -->
           <section>
             <div class="flex items-center gap-2 mb-3">
-              <img src="/cips_logo.svg" alt="" class="h-8 w-8" />
-              <span class="font-semibold text-gray-900">TCIG/CIPS</span>
+              <img src="/logo.svg" alt="" class="h-8 w-8" />
+              <span class="font-semibold text-gray-900">PI-Vision</span>
             </div>
             <p class="leading-6">
-              Computational Imaging for Physical Sciences (CIPS) is a research group within the
-              Toronto Computational Imaging Group, focused on inverse problems, vision, and graphics.
+              Physics-Informed Vision & Imaging at the University of Toronto
             </p>
           </section>
 
@@ -275,11 +257,9 @@ const { title = 'TCIG/CIPS', noTopPad = false } = Astro.props;
             <h2 class="text-gray-900 font-semibold mb-3">Contact</h2>
             <ul class="space-y-2">
               <!-- Replace with your actual group email/location if you want -->
-              <li>
-                <a class="hover:underline" href="mailto:info@example.org">info@example.org</a>
-              </li>
               <li>University of Toronto</li>
-              <li>40 St. George St, Toronto, ON</li>
+              <li>Bahen Centre for Information Technology</li>
+              <li>40 St. George St, Toronto, ON M5S 2E4</li>
             </ul>
           </section>
 
@@ -331,7 +311,7 @@ const { title = 'TCIG/CIPS', noTopPad = false } = Astro.props;
       <!-- Bottom bar -->
       <div class="border-t">
         <div class="mx-auto max-w-6xl px-4 py-6 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Toronto Computational Imaging Group.</p>
+          <p>© {new Date().getFullYear()} PI-Vision.</p>
           <p class="text-gray-500">
             Design elements are inspired by the
             <a href="https://www.scenerepresentations.org/" class="underline hover:text-gray-700">MIT Scene Representation Group</a>.
@@ -341,5 +321,56 @@ const { title = 'TCIG/CIPS', noTopPad = false } = Astro.props;
         </div>
       </div>
     </footer>
+
+    <script is:inline type="module">
+      const FG_SELECTOR = '.gallery-trigger';
+      const FG_BOUND_ATTR = 'fgBound';
+
+      const bindFocusGrid = () => {
+        document.querySelectorAll(FG_SELECTOR).forEach((trigger) => {
+          if (trigger.dataset[FG_BOUND_ATTR] === 'true') return;
+          trigger.dataset[FG_BOUND_ATTR] = 'true';
+
+          const href = trigger.getAttribute('data-href');
+          const gallery = trigger.nextElementSibling;
+          let hideTimeout;
+
+          if (gallery?.classList?.contains('fg-gallery')) {
+            const openGallery = () => {
+              clearTimeout(hideTimeout);
+              trigger.classList.add('fg-open');
+              gallery.classList.add('fg-open');
+            };
+
+            const scheduleClose = () => {
+              clearTimeout(hideTimeout);
+              hideTimeout = window.setTimeout(() => {
+                trigger.classList.remove('fg-open');
+                gallery.classList.remove('fg-open');
+              }, 120);
+            };
+
+            trigger.addEventListener('mouseenter', openGallery);
+            trigger.addEventListener('mouseleave', scheduleClose);
+            trigger.addEventListener('focusin', openGallery);
+            trigger.addEventListener('focusout', scheduleClose);
+            gallery.addEventListener('mouseenter', openGallery);
+            gallery.addEventListener('mouseleave', scheduleClose);
+            gallery.addEventListener('focusin', openGallery);
+            gallery.addEventListener('focusout', scheduleClose);
+          }
+
+          trigger.addEventListener('click', (e) => {
+            if (e.target.closest('a[href]')) return;
+            if (href) window.location.href = href;
+          });
+        });
+      };
+
+      const scheduleFocusGrid = () => window.requestAnimationFrame(bindFocusGrid);
+      scheduleFocusGrid();
+      document.addEventListener('astro:page-load', scheduleFocusGrid);
+      document.addEventListener('astro:after-swap', scheduleFocusGrid);
+    </script>
   </body>
 </html>

@@ -1,10 +1,17 @@
 ---
 title: "Neural Dynamic Modes: Computational Imaging of Dynamical Systems from Sparse Observations"
 authors: ["Ali SaraerToosi", "Renbo Tu", "Kamyar Azizzadenesheli", "Aviad Levis"]
-first_authors: ["Ali SaraerToosi"]
+first_authors: ["Ali SaraerToosi", "Renbo Tu"]
 venue: arXiv
 year: 2025
 month: Jul
+focusTags:
+  - eht
+  - data-driven-dynamics
+  - neural-reconstruction
+  - differentiable-physics
+  - black-holes-strong-gravity
+  - earth-climate
 thumbnail: /images/pubs/neuraldmd.png   # or teaser: for the larger detail image/gif
 project: https://neuraldmd.vercel.app/
 pdf: https://arxiv.org/abs/2507.03094/

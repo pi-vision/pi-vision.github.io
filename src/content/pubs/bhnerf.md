@@ -5,6 +5,11 @@ first_authors: ["Aviad Levis"]
 venue: CVPR
 year: 2022
 month: Mar                 # optional, for sorting
+focusTags:
+  - eht
+  - differentiable-physics
+  - neural-reconstruction
+  - black-holes-strong-gravity
 thumbnail: /images/pubs/bhnerf.gif   # or teaser: for the larger detail image/gif
 teaser: /images/pubs/bhnerf.gif       # optional preferred media for detail page
 youtube: eFPmShxhtg0        # OR: video: https://www.youtube.com/watch?v=dQw4w9WgXcQ

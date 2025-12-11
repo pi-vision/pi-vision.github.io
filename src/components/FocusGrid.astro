@@ -21,9 +21,11 @@ if (!items.length) return;
   class="mb-10"
   style="--fg-row-h:12rem;"
 >
-  <div class="mb-3">
-    <h2 class="text-xl font-semibold">{heading}</h2>
-  </div>
+  {heading && (
+    <div class="mb-3">
+      <h2 class="text-xl font-semibold">{heading}</h2>
+    </div>
+  )}
 
   <!-- grid: we'll place tiles on grid-row:1 and galleries on grid-row:2 (full-width) -->
   <div class="fg-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" style="align-items:start;">
@@ -34,7 +36,9 @@ if (!items.length) return;
                              transition: max-height 300ms ease, opacity 200ms ease; pointer-events: none; background: white/95; }
       .fg-grid .group:hover + .fg-gallery,
       .fg-grid .group:focus-within + .fg-gallery,
-      .fg-grid .fg-gallery:hover { max-height: var(--fg-row-h); opacity: 1; pointer-events: auto; }
+      .fg-grid .fg-gallery:hover,
+      .fg-grid .group.fg-open + .fg-gallery,
+      .fg-grid .fg-gallery.fg-open { max-height: var(--fg-row-h); opacity: 1; pointer-events: auto; }
        .fg-grid .fg-gallery-inner { height: var(--fg-row-h); display: flex; align-items: center; justify-content: flex-start; gap: 0.75rem; flex-wrap: nowrap; overflow-x: auto; padding: 0.5rem; }
        .fg-grid .fg-gallery-inner img { height: calc(var(--fg-row-h) - 1rem); flex-shrink: 0; width: auto; object-fit: cover; border-radius: 0.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.06); }
     </style>
@@ -112,18 +116,3 @@ if (!items.length) return;
     })}
   </div>
 </section>
-
-<script>
-    // Click tile to navigate to research page
-    document.querySelectorAll('.gallery-trigger').forEach((trigger) => {
-      trigger.addEventListener('click', (e) => {
-        // if clicking a link in the gallery, allow it
-        if (e.target.closest('a[href]')) return;
-        
-        const href = trigger.getAttribute('data-href');
-        if (href) {
-          window.location.href = href;
-        }
-      });
-    });
-  </script>

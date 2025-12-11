@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import PubTile from "../../../components/PubTile.astro";
+import { firstAuthorsEtAl } from "../../../lib/format.ts";
+
+const focusCollections = ['instruments', 'science', 'computation'] as const;
+
+export async function getStaticPaths() {
+  const pubs = await getCollection('pubs');
+  const tags = new Set<string>();
+  pubs.forEach((pub) => {
+    (pub.data.focusTags ?? []).forEach((tag) => tags.add(tag));
+  });
+
+  return Array.from(tags).map((tag) => ({
+    params: { tag },
+  }));
+}
+
+const { tag } = Astro.params;
+const allPubs = await getCollection('pubs');
+const focusEntriesRaw = (
+  await Promise.all(
+    focusCollections.map(async (collection) => {
+      const entries = await getCollection(collection);
+      return entries.map((entry) => ({ ...entry, collection }));
+    })
+  )
+).flat();
+const focusEntry = focusEntriesRaw.find((entry) => entry.slug === tag);
+const parentFocusSlug = focusEntry?.collection;
+
+const monthToNum = (m: number | string | undefined) =>
+  typeof m === "number" ? m :
+  typeof m === "string" ? new Date(`${m} 1, 2000`).getMonth() + 1 : 12;
+const byDateDesc = (a, b) =>
+  (b.data.year - a.data.year) ||
+  (monthToNum(b.data.month) - monthToNum(a.data.month));
+
+const filtered = allPubs
+  .filter((pub) => pub.data.focusTags?.includes(tag))
+  .sort(byDateDesc);
+const featuredTiles = filtered.slice(0, 6);
+
+const heading = focusEntry?.data.title ?? `Tag: ${tag}`;
+const blurb = focusEntry?.data.description ?? focusEntry?.data.blurb;
+const backToFocusHref = parentFocusSlug ? `/focus/${parentFocusSlug}#${parentFocusSlug}-${tag}` : null;
+---
+<BaseLayout title={`Publications – ${heading}`}>
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-3 text-sm">
+    <a href="/publications/" class="inline-flex items-center gap-2 font-semibold text-blue-700 hover:text-blue-900">
+      <span aria-hidden="true">←</span>
+      <span>All publications</span>
+    </a>
+    {backToFocusHref && (
+      <a href={backToFocusHref} class="inline-flex items-center gap-2 font-semibold text-blue-700 hover:text-blue-900">
+        <span aria-hidden="true">↺</span>
+        <span>Back to {heading}</span>
+      </a>
+    )}
+  </div>
+
+  <div class="mb-8 space-y-3">
+    <p class="text-xs uppercase tracking-[0.2em] text-gray-500">Focused publications</p>
+    <h1 class="text-3xl font-semibold">{heading}</h1>
+    {blurb && <p class="text-lg text-gray-700">{blurb}</p>}
+    {!filtered.length && (
+      <p class="text-gray-600">We don't have publications tagged for this focus area yet. Check back soon!</p>
+    )}
+  </div>
+
+  {filtered.length > 0 && (
+    <>
+      {featuredTiles.length > 0 && (
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+          {featuredTiles.map((p) => (
+            <PubTile
+              entry={p}
+              to={`/publications/${p.slug}/`}
+              suppressTitleTransition={true}
+            />
+          ))}
+        </div>
+      )}
+
+      <div class="overflow-x-auto rounded-xl border">
+        <table class="min-w-full text-sm">
+          <thead class="bg-gray-50 text-gray-600">
+            <tr>
+              <th class="px-3 py-2 text-left w-28">Date</th>
+              <th class="px-3 py-2 text-left">Title</th>
+              <th class="px-3 py-2 text-left">First Authors</th>
+              <th class="px-3 py-2 text-left w-36">Venue</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            {filtered.map((p) => {
+              const firstEtAl = firstAuthorsEtAl(p.data.authors ?? [], p.data.first_authors);
+              return (
+                <tr id={p.slug}>
+                  <td class="px-3 py-2 text-gray-600">{p.data.month ?? ''} {p.data.year}</td>
+                  <td class="px-3 py-2">
+                    <a href={`/publications/${p.slug}/`} class="font-medium hover:underline">
+                      <span transition:name={`title-${p.slug}`}>{p.data.title}</span>
+                    </a>
+                    {p.data.subtitle && <div class="text-gray-600">{p.data.subtitle}</div>}
+                    {p.data.authors?.length ? (
+                      <div class="text-gray-700 mt-1">{p.data.authors.join(", ")}</div>
+                    ) : null}
+                  </td>
+                  <td class="px-3 py-2 text-gray-800">
+                    {firstEtAl}
+                  </td>
+                  <td class="px-3 py-2">
+                    <span class="inline-flex items-center rounded border px-2 py-0.5">{p.data.venue}</span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </>
+  )}
+</BaseLayout>

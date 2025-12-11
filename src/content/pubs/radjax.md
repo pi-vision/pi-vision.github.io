@@ -1,10 +1,15 @@
 ---
 title: "Revealing Fine Structure in Protoplanetary Disks with Physics Constrained Neural Fields"
 authors: ["Aviad Levis", "Nhan Luong", "Richard Teague", "Katherine Bouman", "Marcelo Barraza-Alfaro", "Kevin Flaherty"]
-first_authors: ["Aviad Levis"]
+first_authors: ["Aviad Levis", "Nhan Luong"]
 venue: arXiv
 year: 2025
 month: Sep
+focusTags:
+  - alma
+  - differentiable-physics
+  - neural-reconstruction
+  - planet-formations-exoplanets
 thumbnail: /images/pubs/radjax.png   # or teaser: for the larger detail image/gif
 pdf: https://arxiv.org/pdf/2509.03623
 abstract: >

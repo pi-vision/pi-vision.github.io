@@ -4,15 +4,16 @@ import { firstAuthorsEtAl } from '../lib/format.ts';
 
 const {
   entry,
-  to,                         // required: link target (e.g. "/publications/#slug" or "/publications/slug/")
-  suppressTitleTransition = false, // set true on /publications to avoid duplicate title names
+  to,
+  suppressTitleTransition = false,
 } = Astro.props;
 
 const slug  = entry.slug;
 const thumb = entry.data.thumbnail ?? '/images/placeholder-thumb.svg';
 const firstEtAl = firstAuthorsEtAl(entry.data.authors ?? [], entry.data.first_authors);
+const targetHref = typeof to === 'string' && to.trim().length ? to : `/publications/${slug}/`;
 ---
-<a href={to} aria-label={entry.data.title} class="block group">
+<a href={targetHref} aria-label={entry.data.title} class="block group">
   <article
     class="rounded-xl border border-black/10 p-3 transition-all duration-200 ease-out
            bg-white group-hover:bg-indigo-50 group-hover:border-indigo-200 group-hover:shadow-md"
