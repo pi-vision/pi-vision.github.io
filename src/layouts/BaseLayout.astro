@@ -371,6 +371,20 @@ const { title = 'PI-Vision', noTopPad = false } = Astro.props;
       scheduleFocusGrid();
       document.addEventListener('astro:page-load', scheduleFocusGrid);
       document.addEventListener('astro:after-swap', scheduleFocusGrid);
+
+      const scrollToHash = () => {
+        const hash = window.location.hash.replace(/^#/, '');
+        if (!hash) return;
+        const el = document.getElementById(decodeURIComponent(hash));
+        if (!el) return;
+        requestAnimationFrame(() => {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      };
+
+      window.addEventListener('load', scrollToHash);
+      document.addEventListener('astro:page-load', () => setTimeout(scrollToHash, 0));
+      document.addEventListener('astro:after-swap', () => setTimeout(scrollToHash, 0));
     </script>
   </body>
 </html>
