@@ -372,8 +372,19 @@ const { title = 'PI-Vision', noTopPad = false } = Astro.props;
       document.addEventListener('astro:page-load', scheduleFocusGrid);
       document.addEventListener('astro:after-swap', scheduleFocusGrid);
 
+      let pendingHash = '';
+
+      document.addEventListener('astro:before-swap', (event) => {
+        try {
+          const nextUrl = new URL(event.detail.to, window.location.origin);
+          pendingHash = nextUrl.hash;
+        } catch {
+          pendingHash = '';
+        }
+      });
+
       const scrollToHash = (retries = 10) => {
-        const hash = window.location.hash.replace(/^#/, '');
+        const hash = (pendingHash || window.location.hash).replace(/^#/, '');
         if (!hash) return;
         const el = document.getElementById(decodeURIComponent(hash));
         if (!el) {
@@ -385,9 +396,11 @@ const { title = 'PI-Vision', noTopPad = false } = Astro.props;
         requestAnimationFrame(() => {
           el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
+        pendingHash = '';
       };
 
       window.addEventListener('load', scrollToHash);
+      window.addEventListener('hashchange', () => scrollToHash());
       document.addEventListener('astro:page-load', () => setTimeout(() => scrollToHash(), 0));
       document.addEventListener('astro:after-swap', () => setTimeout(() => scrollToHash(), 0));
     </script>
