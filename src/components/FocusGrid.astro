@@ -95,7 +95,12 @@ if (!items.length) return;
             <div class="fg-gallery" role="region" aria-hidden="true">
               <div class="fg-gallery-inner">
                 {it.gallery.map((g, idx) => (
-                  <a key={idx} href={g.href || '#'} class="relative block hover:opacity-80 transition-opacity">
+                  <a
+                    key={idx}
+                    href={g.href || '#'}
+                    class="relative block hover:opacity-80 transition-opacity"
+                    data-astro-reload
+                  >
                      <img
                        src={g.image}
                        alt={g.alt || ''}
