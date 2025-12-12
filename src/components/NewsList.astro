@@ -1,14 +1,17 @@
 ---
 import { getCollection } from 'astro:content';
 
-const { limit = 10, title = 'News & Highlights' } = Astro.props;
+const { limit = 5, title = 'News & Highlights' } = Astro.props;
+const PINNED_LIMIT = 3;
 
 // sort newest → oldest
 const entries = (await getCollection('news'))
   .sort((a, b) => +b.data.date - +a.data.date);
 
-const topRaw  = entries.slice(0, limit);
-const restRaw = entries.slice(limit);
+const pinnedRaw = entries.filter((entry) => entry.data.pinned).slice(0, PINNED_LIMIT);
+const others = entries.filter((entry) => !entry.data.pinned);
+const topRaw  = others.slice(0, limit);
+const restRaw = others.slice(limit);
 
 // pre-render markdown
 const renderBatch = async (arr) =>
@@ -17,6 +20,7 @@ const renderBatch = async (arr) =>
     return { entry: e, Content: R.Content };
   }));
 
+const pinned = await renderBatch(pinnedRaw);
 const top  = await renderBatch(topRaw);
 const rest = await renderBatch(restRaw);
 
@@ -30,7 +34,7 @@ const fmt = (d: Date | string) =>
   <div class="mb-3 flex items-baseline gap-4">
     <h2 id={`${uid}-heading`} class="text-xl font-semibold">{title}</h2>
 
-    {entries.length > limit && (
+    {(restRaw.length > 0) && (
       <button
         type="button"
         class="inline-flex items-center gap-2 font-semibold text-600 hover:text-blue-700"
@@ -43,6 +47,32 @@ const fmt = (d: Date | string) =>
       </button>
     )}
   </div>
+
+  {pinned.length > 0 && (
+    <div class="mb-6">
+      <p class="text-xs uppercase tracking-[0.2em] text-gray-500 mb-2">Pinned highlights</p>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {pinned.map(({ entry, Content }) => (
+          <article class="rounded-xl border border-indigo-200/80 bg-indigo-50/80 p-4 shadow-sm ring-1 ring-indigo-100/80">
+            <div class="flex items-center justify-between text-xs uppercase tracking-wider text-indigo-800">
+              <span class="inline-flex items-center gap-1 font-semibold">
+                <svg viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5">
+                  <path d="M7.5 1.5a1 1 0 0 0-1 1v4.086a1 1 0 0 1-.293.707L4.5 9a1 1 0 0 0 .707 1.707H7v6.793a1 1 0 0 0 1.707.707l2-2a1 1 0 0 0 .293-.707V10.707l1.293-1.293A1 1 0 0 0 12.586 8h-1.086V2.5a1 1 0 0 0-1-1h-3z"/>
+                </svg>
+                Pinned
+              </span>
+              <time datetime={new Date(entry.data.date).toISOString()} class="font-semibold text-indigo-700">
+                {fmt(entry.data.date)}
+              </time>
+            </div>
+            <div class="prose prose-sm max-w-none mt-2">
+              <Content />
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  )}
 
   <div class="overflow-x-auto rounded-xl border">
     <table class="min-w-full text-sm">

@@ -123,9 +123,25 @@ const news = defineCollection({
     date: z.coerce.date(),      // YYYY-MM-DD recommended; coerces string→Date
     // Optional fields if you want:
     link: z.string().url().optional(),
-    pin: z.boolean().optional(),   // if you ever want to pin items to the top
+    pinned: z.boolean().optional(),   // highlight in News grid
   }),
 });
 
+const outreach = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    category: z.string().optional(),
+    date: z.coerce.date().optional(),
+    description: z.string(),
+    image: z.string().optional(),
+    imageAlt: z.string().optional(),
+    imageHeightClass: z.string().optional(),
+    links: z.array(z.object({
+      label: z.string(),
+      href: z.string(),
+    })).optional(),
+  }),
+});
 
-export const collections = { people, pubs, news, talks, courses, research_focus, focus_meta, instruments, computation, science };
+export const collections = { people, pubs, news, outreach, talks, courses, research_focus, focus_meta, instruments, computation, science };
