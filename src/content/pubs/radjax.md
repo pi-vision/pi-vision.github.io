@@ -9,7 +9,7 @@ focusTags:
   - alma
   - differentiable-physics
   - neural-reconstruction
-  - planet-formations-exoplanets
+  - planet-formation-exoplanets
 thumbnail: /images/pubs/radjax.png   # or teaser: for the larger detail image/gif
 pdf: https://arxiv.org/pdf/2509.03623
 abstract: >

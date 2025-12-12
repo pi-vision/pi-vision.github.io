@@ -10,7 +10,7 @@ month: Jan
 focusTags:
   - black-holes-strong-gravity
   - surrogate-simulation
-  - dynamics-from-data
+  - data-driven-dynamics
 thumbnail: /images/pubs/effective-resistivity.png
 pdf: https://arxiv.org/pdf/2501.04800
 abstract: >
