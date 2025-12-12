@@ -2,7 +2,7 @@
 title: Event Horizon Telescope (EHT)
 image: /images/focus/EHT.gif
 kicker: Very Large Baseline Interferometry (VLBI)
-href: https://eventhorizontetelescope.org
+href: https://eventhorizontelescope.org
 description: A global network of radio telescopes capable of resolving the event horizon of black holes. We build computational methods to image the 3D structure and evolving environment around our galaxy’s central black hole, and contribute to next-generation efforts.
 order: 2
 ---

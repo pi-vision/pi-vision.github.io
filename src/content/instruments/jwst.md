@@ -2,7 +2,7 @@
 title: James Webb Space Telescope (JWST)
 image: /images/focus/JWST.jpg
 kicker: Infrared Imaging and Coronography
-href: https://www.jwst.nasa.gov
+href: https://science.nasa.gov/mission/webb/
 description: A space observatory for high-resolution infrared imaging. We design differentiable reconstruction methods for JWST coronagraphy and scattered-light imaging, and are developing gravitational-lensing algorithms for future exploration.
 order: 3
 ---
