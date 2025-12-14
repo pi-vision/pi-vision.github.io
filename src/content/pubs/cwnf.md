@@ -1,0 +1,26 @@
+---
+title: "Revealing the 3D Cosmic Web through Gravitationally Constrained Neural Fields"
+authors: ["Brandon Zhao", "Aviad Levis", "Liam Connor", "Pratul P. Srinivasan", "Katherine L. Bouman"]
+first_authors: ["Brandon Zhao", "Aviad Levis"]
+venue: ICLR
+year: 2025
+month: Apr
+focusTags:
+  - dark-matter-cosmology
+  - differentiable-physics
+  - neural-reconstruction
+teaser: /images/pubs/cwnf-teaser.gif
+thumbnail: /images/pubs/cwnf-thumb.gif
+youtube: m78OysBWH4g
+pdf: https://arxiv.org/pdf/2504.15262
+project: https://imaging.cms.caltech.edu/cwnf/
+abstract: >
+  Weak gravitational lensing is the slight distortion of galaxy shapes caused primarily by the gravitational effects of dark matter in the universe. In our work, we seek to invert the weak lensing signal from 2D telescope images to reconstruct a 3D map of the universe's dark matter field. While inversion typically yields a 2D projection of the dark matter field, accurate 3D maps of the dark matter distribution are essential for localizing structures of interest and testing theories of our universe. However, 3D inversion poses significant challenges. First, unlike standard 3D reconstruction that relies on multiple viewpoints, in this case, images are only observed from a single viewpoint. This challenge can be partially addressed by observing how galaxy emitters throughout the volume are lensed. However, this leads to the second challenge: the shapes and exact locations of unlensed galaxies are unknown, and can only be estimated with a very large degree of uncertainty. This introduces an overwhelming amount of noise which nearly drowns out the lensing signal completely. Previous approaches tackle this by imposing strong assumptions about the structures in the volume. We instead propose a methodology using a gravitationally-constrained neural field to flexibly model the continuous matter distribution. We take an analysis-by-synthesis approach, optimizing the weights of the neural network through a fully differentiable physical forward model to reproduce the lensing signal present in image measurements. We showcase our method on simulations, including realistic simulated measurements of dark matter distributions that mimic data from upcoming telescope surveys. Our results show that our method can not only outperform previous methods, but importantly is also able to recover potentially surprising dark matter structures.
+bibtex: |
+  @inproceedings{zhao2025cwnf,
+    title={Revealing the 3D Cosmic Web through Gravitationally Constrained Neural Fields},
+    author={Zhao, Brandon and Levis, Aviad and Connor, Liam and Srinivasan, Pratul P. and Bouman, Katherine L.},
+    booktitle={Proceedings of the International Conference on Learning Representations},
+    year={2025}
+  }
+---

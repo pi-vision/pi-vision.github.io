@@ -42,6 +42,7 @@ const filtered = allPubs
   .filter((pub) => pub.data.focusTags?.includes(tag))
   .sort(byDateDesc);
 const featuredTiles = filtered.slice(0, 6);
+const olderTiles = filtered.slice(6);
 
 const heading = focusEntry?.data.title ?? `Tag: ${tag}`;
 const blurb = focusEntry?.data.description ?? focusEntry?.data.blurb;
@@ -73,15 +74,36 @@ const backToFocusHref = parentFocusSlug ? `/focus/${parentFocusSlug}#${parentFoc
   {filtered.length > 0 && (
     <>
       {featuredTiles.length > 0 && (
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
-          {featuredTiles.map((p) => (
-            <PubTile
-              entry={p}
-              to={`/publications/${p.slug}/`}
-              suppressTitleTransition={true}
-            />
-          ))}
-        </div>
+        <>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            {featuredTiles.map((p) => (
+              <PubTile
+                entry={p}
+                to={`/publications/${p.slug}/`}
+                suppressTitleTransition={true}
+              />
+            ))}
+          </div>
+          {olderTiles.length > 0 && (
+            <details class="mb-10 bg-gray-50/60 rounded-xl border border-gray-200">
+              <summary class="cursor-pointer px-4 py-3 flex items-center justify-between gap-4 text-sm font-semibold">
+                <span>Show older publications ({olderTiles.length} more)</span>
+                <span aria-hidden="true" class="text-base">›</span>
+              </summary>
+              <div class="px-4 pb-4 pt-1">
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {olderTiles.map((p) => (
+                    <PubTile
+                      entry={p}
+                      to={`/publications/${p.slug}/`}
+                      suppressTitleTransition={true}
+                    />
+                  ))}
+                </div>
+              </div>
+            </details>
+          )}
+        </>
       )}
 
       <div class="overflow-x-auto rounded-xl border">
